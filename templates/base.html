@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{% block title %} Referral system {% endblock %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- CSS -->
+        {% block mainstyles %}
+          <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
+          <!-- https://github.com/nkunihiko/django-bootstrap3-datetimepicker -->
+          <link href="{{ STATIC_URL }}css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+          <link href="{{ STATIC_URL }}css/application.css" rel="stylesheet">
+          {% block css %}
+          {% endblock %}
+        {% endblock %}
+    </head>
+
+    <body>
+      {% block container %}
+        {% block header %}
+          {% include "header.html" %}
+           <div class="messages success-msg">
+          {% if messages %}
+              {% for message in messages %}
+              <div class='pull-right alert alert-{% if message.tags %}{{ message.tags }}{% endif %}'>{{ message }}</div>
+
+              {% endfor %}
+          {% endif %}
+          </div>
+
+        {% endblock%}
+
+        {% block main-container%}
+
+          <div class="container-fluid main-container">
+
+            {% block breadcrumb %}
+
+            {% endblock %}
+
+            {% block content %}
+
+            {% endblock%}
+           </div>
+        {% endblock%}
+      {% endblock%}
+
+        <!-- Le javascript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <!-- JS -->
+        <script src="{{ STATIC_URL }}js/jquery.js"></script>
+        <script src="{{ STATIC_URL }}js/bootstrap.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+        {% include 'autocomplete_light/static.html' %}
+        {% block javascript %}
+
+        {% endblock %}
+        <script type="text/javascript">
+          $(document).ready(function(){
+            $(".messages").animate({
+                opacity: "toggle"
+               }, 6000, function() {
+            });
+          });
+        </script>
+
+    </body>
+
+</html>

@@ -1,0 +1,11 @@
+Django==1.7.7
+django-autocomplete-light==2.1.0rc3
+django-phonenumber-field==0.7.2
+phonenumbers==7.0.4
+six==1.9.0
+python-social-auth==0.2.1
+django-celery==3.1.16
+kombu==3.0.26
+amqp==1.4.6
+psycopg2
+https://github.com/django-ses/django-ses/archive/master.zip

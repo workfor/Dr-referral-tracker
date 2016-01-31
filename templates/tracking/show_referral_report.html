@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load visite_counts %}
+
+{% block content %}
+<div class="form col-sm-offset-2 col-sm-8">
+<table class="table table-bordered">
+  <thead>
+  	<tr class="">
+	  <th>Organization</th>
+		  <th>MTD ({% now "Y" %})
+		  </br>
+		  {% now "m/" %}1 - {% now "m/d" %}
+		   </th>
+		  <th>MTD ({{ last_year }})
+		  </br>
+		  {% now "m/" %}1 - {% now "m/d" %}
+		   </th>
+		  <th>YTD ({% now "Y" %})
+		  </br>
+		  1/1 - {% now "m/d" %}
+		   </th>
+		  <th>YTD ({{ last_year }})
+		  </br>
+		  1/1 - {% now "m/d" %}
+		   </th>
+  	</tr>
+  </thead>
+{% for organization in all_orgs %}
+<tr class="">
+			  <th class="active">{{organization}}
+			  </th>
+
+			  <td class="current_month_date">
+			  {% get_organization_counts organization as counts %}
+
+			  <span>{{counts}}</span>
+			  </td>
+			  <td class="last_month_date">
+			  	{% get_organization_counts_month_lastyear organization as counts %}{{counts}}
+			  </td>
+			  <td class="current_year">
+			  	{% get_organization_counts_year organization as counts %}{{counts}}
+			  	</td>
+			  <td class="last_year" >
+			  	{% get_organization_counts_year_lastyear organization as counts %}{{counts}}
+			  	</td>
+		</tr>
+<br/>
+	
+	{% for physician in organization.get_physician %}
+
+	<tr class="">
+			  <td class="active text-right"> {{physician}}
+			  </td>
+			  <td class="current_month_date" >
+			  	{% get_physician_counts physician as counts %}{{counts}}
+			  </td>
+			  <td class="last_month_date">
+			  	{% get_physician_counts_month_lastyear physician as counts %}{{counts}}
+			  </td>
+			  <td class="current_year">
+				{% get_physician_counts_year physician as counts %}
+			  {{counts}}
+			  </td>
+			  <td class="last_year">
+			  	{% get_physician_counts_year_lastyear physician as counts %}{{counts}}
+			  </td>
+		</tr>
+	{% endfor %}
+
+{% endfor %}
+  	
+
+
+</table>
+</div>
+
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+	$(document).ready(function(){
+	var	current_val  = new Array();
+	var	last_val  = new Array();
+
+
+
+$('table tr').each(function(){
+	console.log($(this))
+	mod_current = parseInt($(this).find('.current_month_date').text());
+	mod_last = parseInt($(this).find('.last_month_date').text());
+	ytd_current = parseInt($(this).find('.current_year').text());
+	ytd_last = parseInt($(this).find('.last_year').text());
+
+	if(mod_current<mod_last){
+		$(this).find('.current_month_date').addClass('danger');
+	}
+	else if (mod_last<=mod_current) {
+		$(this).find('.current_month_date').addClass('success');
+	};
+
+	if(ytd_current<ytd_last){
+		$(this).find('.current_year').addClass('danger');
+	}
+	else if (ytd_last<=ytd_current) {
+		$(this).find('.current_year').addClass('success');
+	};
+
+
+})
+
+
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% load visite_counts %}
+{% block main-container %}
+<!-- <div class="messages" style="position: absolute;right: 0;">
+  {% if messages %}
+      {% for message in messages %}
+      <div class='alert alert-{% if message.tags %}{{ message.tags }}{% endif %}'>{{ message }}</div>
+      {% endfor %}
+  {% endif %}
+</div> -->
+
+<div class="row" style="background-color: rgb(220, 234, 210);">
+      <div class="col-md-2">
+        <h3>Referreral Tracker </h3>
+        <a href=""> Thankyou E-Mails</a>
+      </div>
+
+    <div class="col-md-3">
+        <h4 style="text-align:center;">Record Referral </h4>
+          <form method="POST" class="form-horizontal" action=".">
+          {% csrf_token %}
+          {% for field in refform.visible_fields %}
+          <div class="form-group">
+              <label for="inputEmail3" class="col-sm-3 control-label">{{field.label}}</label>
+              <div class="col-sm-9">
+                {{ field }}
+                {{ field.errors }}
+                {{ field.help_text }}
+              </div>
+          </div>
+          {% endfor %}
+          <div class="form-group">
+              <div class="col-sm-offset-6 col-sm-8">
+                <input type="submit" name="refform" value="submit" class="btn btn-default">
+              </div>
+          </div>
+        </form>
+    </div>
+
+    <div class="col-md-3">
+        <h4 style="text-align:center;">Create Practitioner </h4>
+          <form method="POST" class="form-horizontal" action=".">
+          {% csrf_token %}
+          {% for field in phyform.visible_fields %}
+          <div class="form-group">
+              <label for="inputEmail3" class="col-md-6 control-label">{{field.label}}</label>
+              <div class="col-md-4">
+                {{ field }}
+                {{ field.errors }}
+                {{ field.help_text }}
+              </div>
+          </div>
+          {% endfor %}
+          <div class="form-group">
+              <div class="col-sm-offset-6 col-sm-8">
+                <input type="submit" name="phyform" value="submit" class="btn btn-default">
+              </div>
+          </div>
+        </form>
+    </div>
+
+    <div class="col-md-4" style="">
+        <h4 style="text-align:center;">Create Group </h4>
+          <form method="POST" class="form-horizontal" action=".">
+          {% csrf_token %}
+          {% for field in orgform.visible_fields %}
+          <div class="form-group">
+              <label for="inputEmail3" class="col-md-6 control-label">{{field.label}}</label>
+              <div class="col-md-5">
+                {{ field }}
+                {{ field.errors }}
+                {{ field.help_text }}
+              </div>
+          </div>
+          {% endfor %}
+          <div class="form-group">
+              <div class="col-sm-offset-6 col-sm-8">
+                <input type="submit" name="orgform" value="submit" class="btn btn-default">
+              </div>
+          </div>
+        </form>
+    </div>
+<hr>
+</div>
+
+<div class="col-md-3">
+    <table class="table table-bordered">
+        <tr class="" style="background-color: rgb(76, 215, 250);">
+         <td colspan = "4"> Referral Totals</td>
+        </tr>
+
+        <tr class="">
+         <td class="col-md-1"></td>
+         <th class="col-md-1">Month</th>
+         <th class="col-md-1">Year </th>
+        </tr>
+
+       {% for referral in referrals %}
+        <tr>
+          {% get_referral_months referral.month as month_name %}
+          <td class="col-md-1">{{ month_name }}</td>
+          <td class="col-md-1">{{ referral.total_visit_count }}</td>
+          <td class="col-md-1">{{ referral.year_total }}</td>
+        </tr>
+       {% endfor %}
+    <br/>
+
+    </table>
+</div>
+
+
+
+<div class="col-md-3">
+    <table class="table table-bordered">
+        <tr class="" style="background-color: rgb(76, 215, 250);">
+         <td colspan = "3"> Top Groups (Past year)</td>
+        </tr>
+       {% for orgs in org_visit_sum %}
+        <tr >
+          <td class="col-md-1">{{ forloop.counter }}</td>
+          <td class="col-md-1">{{ orgs.org_name }}</td>
+          <td class="col-md-1">{{ orgs.total_org_visits }}</td>
+        </tr>
+       {% endfor %}
+    <br/>
+
+    </table>
+</div>
+
+<div class="col-md-3">
+    <table class="table table-bordered">
+        <tr class="" style="background-color: rgb(76, 215, 250);">
+         <td colspan = "3"> Top Doctors (Past year)</td>
+        </tr>
+       {% for physician in physician_visit_sum %}
+        <tr >
+          <td class="col-md-1">{{ forloop.counter }}</td>
+          <td class="col-md-1">{{physician.physician_name}}</td>
+          <td class="col-md-1">{{ physician.total_visits }}</td>
+        </tr>
+       {% endfor %}
+    <br/>
+
+    </table>
+</div>
+
+
+<div class="col-md-3">
+    <table class="table table-bordered">
+        <tr class="" style="background-color: rgb(76, 215, 250);">
+         <td colspan = "3"> Special Groups (Past year)</td>
+        </tr>
+       {% for orgs in special_visit_sum %}
+        <tr >
+          <td class="col-md-1">{{ forloop.counter }}</td>
+          <td class="col-md-1">{{ orgs.org_name}}</td>
+          <td class="col-md-1">{{ orgs.total_org_special_visits}}</td>
+        </tr>
+       {% endfor %}
+    <br/>
+
+    </table>
+</div>
+
+{% endblock main-container %}
+
+{% block javascript %}
+
+ <script type="text/javascript">
+    $( document ).ready(function() {
+
+     $('#id_visit_date').datetimepicker({
+        //language:  'fr',
+        format: 'yyyy-mm-dd',
+        language:  'fr',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0
+    });
+
+     $("#id_physician_name").addClass("capital");
+     $("#id_org_name").addClass("capital");
+     $("#id_org_contact_name").addClass("capital");
+
+});
+        </script>
+  {% endblock %}
