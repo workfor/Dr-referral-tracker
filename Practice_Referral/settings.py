@@ -15,9 +15,6 @@ import os
 #from Practice_Referral.settings_secret import *
 from Practice_Referral.settings_secret_template import *
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
-
 # SECURITY WARNING: keep the secret key used in production secret!
 # see settings_secret
 
