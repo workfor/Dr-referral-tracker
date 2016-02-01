@@ -82,26 +82,6 @@ SOCIAL_AUTH_LOGIN_URL = '/'
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/home/'
 
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'practicereferral',
-        'HOST': 'localhost',
-        'PORT': '5432',
-        'USER': dbuser,
-        'PASSWORD': dbpass
-    }
-}
-
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'

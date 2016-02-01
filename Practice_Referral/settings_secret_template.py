@@ -1,6 +1,13 @@
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'km4eHMibwT6Axr'
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'sample_db.sqlite3'),
+    }
+}
+
 # SOCIAL_AUTH_TWITTER_KEY = 'update me'
 # SOCIAL_AUTH_TWITTER_SECRET = 'update me'
 
