@@ -7,6 +7,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from datetime import datetime , timedelta, date
+from django.db.models import Sum
 
 today = date.today()
 LAST_MONTH = date(day=1, month=today.month, year=today.year) - timedelta(days=1)
@@ -61,6 +62,12 @@ class Physician(models.Model):
 
     def __str__(self):
         return self.physician_name
+    
+    def get_referral(self, params):
+        today = params['to_date']
+        week_ago = params['from_date']
+        referral_sort = self.Referral.filter(visit_date__range=(str(week_ago), str(today))).values('visit_date').annotate(visit=Sum('visit_count')).order_by('-visit_date')
+        return referral_sort
 
 
 class Referral(models.Model):
