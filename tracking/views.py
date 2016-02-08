@@ -183,3 +183,60 @@ class LogoutView(View):
     def get(self, request, *args, **kwargs):
         auth_logout(request)
         return redirect('/')
+
+class GetReferralHistory(View):
+    """
+    Display a summary of referrals by Organization:provider:
+    """
+    @method_decorator(login_required)
+    def get(self, request, *args, **kwargs):
+        today = date.today()
+        week_ago = today - timedelta(days=7)
+        all_orgs = Physician.objects.order_by('physician_name')
+        all_ref = {}
+        for phys in all_orgs :
+            phys_ref = phys.get_referral({'from_date' : week_ago, 'to_date' : today});
+            if phys_ref.count() :
+                for ref in phys_ref :
+                    if not phys.id in all_ref : 
+                        all_ref[phys.id] = {'name' : phys.physician_name, 'refs' :  [ ref ] }
+                    else :
+                        all_ref[phys.id]['refs'].append(ref)
+                
+        form = ReferralHistoryForm(initial={'from_date': week_ago, 'to_date' : today})
+        ctx = {
+                'all_orgs': all_ref,
+                'today': today,
+                'week_ago' : week_ago,
+                "form": form
+            }
+        return render(request,"tracking/show_referral_history.html",ctx )
+    
+    
+    def post(self, request, *args, **kwargs):
+        
+        today = datetime.strptime(request.POST['to_date'], "%Y-%m-%d").date()
+        week_ago = datetime.strptime(request.POST['from_date'], "%Y-%m-%d").date()
+        form = ReferralHistoryForm(request.POST)
+        form.is_valid()
+        if 'physician' in request.POST : 
+            all_orgs = Physician.objects.filter(id=int(request.POST['physician'])).order_by('physician_name')
+        else :
+            all_orgs = []
+        
+        all_ref = {}
+        for phys in all_orgs :
+            phys_ref = phys.get_referral({'from_date' : week_ago, 'to_date' : today});
+            if phys_ref.count() :
+                for ref in phys_ref :
+                    if not phys.id in all_ref : 
+                        all_ref[phys.id] = {'name' : phys.physician_name, 'refs' :  [ ref ] }
+                    else :
+                        all_ref[phys.id]['refs'].append(ref)
+        ctx = {
+            'all_orgs': all_ref,
+            'today': today,
+            'week_ago' : week_ago,
+            "form": form
+        }
+        return render(request,"tracking/show_referral_history.html",ctx )
