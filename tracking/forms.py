@@ -39,3 +39,18 @@ class ReferralForm(autocomplete_light.ModelForm):
     class Meta:
         model = Referral
         exclude = []
+   
+
+class ReferralHistoryForm(autocomplete_light.ModelForm):
+    """
+    record a new referral
+    autocomplete Physician
+    Don't need blank for Org
+    Assume today's date
+    """
+
+    from_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datepicker', 'readonly' : 'readonly'}))
+    to_date = forms.DateField(widget=forms.TextInput(attrs={'class':'datepicker', 'readonly' : 'readonly'}))
+    class Meta:
+        model = Referral
+        fields = ['physician', 'from_date', 'to_date']
