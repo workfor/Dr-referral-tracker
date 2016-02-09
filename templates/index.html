@@ -106,6 +106,35 @@
     <br/>
 
     </table>
+    	  
+    <table class="table table-bordered">
+        <tr class="" style="background-color: rgb(76, 215, 250);">
+         <td colspan = "4"> Referral History:<br> From {{week_ago|date:"Y-m-d"}} to {{today|date:"Y-m-d"}}</td>
+        </tr>
+    </table>
+	  {% for pkey, physician in all_orgs.items %}
+	  {% if pkey %}
+	  <table class = "table table-bordered">
+		<caption style="font-size: 15px;color: #333;">
+		  for: {{ physician.name }}
+		</caption>
+		<thead>
+		  <tr>
+			<th>Date</th>
+			<th>Count</th>
+		  </tr>
+		</thead>
+		<tbody>
+		{% for referral in physician.refs %}
+		  <tr>
+			<td>{{ referral.visit_date|date:"Y-m-d" }}</td>
+			<td>{{ referral.visit }}</td>
+		  </tr>
+		{% endfor %}
+		</tbody>
+	  </table>
+	  {% endif %}
+	  {% endfor %}
 </div>
 
 
