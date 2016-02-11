@@ -16,7 +16,7 @@ before_script:
   - psql -d travis_ci_test < data
 # command to run tests
 script:
-  - python manage.py test --settings=Practice_Referral.test_settings
+  - python manage.py test --settings=Practice_Referral.test_settings --noinput
 
 notifications:
   email: false
